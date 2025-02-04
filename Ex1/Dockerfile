@@ -5,7 +5,7 @@ WORKDIR /app/node
 COPY package*.json .
 COPY index.js .
 
-RUN npm install
+RUN apk update && npm install
 
 CMD ["npm","start"]
 
