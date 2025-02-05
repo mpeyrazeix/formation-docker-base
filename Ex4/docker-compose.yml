@@ -1,28 +1,23 @@
-version: '3.8'
-
 services:
-  db:
-    image: mysql:5.7
-    container_name: mychsql
+
+  mongobdd:
+    image: mongo
     restart: always
-    volumes:
-      - db-vol:/var/lib/mysql
-      - ./article.sql:/docker
     environment:
-      - MYSQL_DATABASE = test
-      - MYSQL_USER = test
-      - MYSQL_PASSWORD = test
-
-  app:
-    image: imageapp
-    container_name: michelapp
-    restart: always
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
-      - ./app:/var/www/html
-    ports:
-      - 8080:80
-    depends_on:
-      - db
+      - ./data:/data/db
 
-volumes:
-  db-vol:
+  mongoexpress:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongobdd:27017/
+      ME_CONFIG_BASICAUTH: false
+    depends_on: 
+      - mongobdd
