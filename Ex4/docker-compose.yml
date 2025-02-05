@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: michel_mysql
+    restart: always
+    volumes:
+      - db-vol:/var/lib/mysql
+      - ./article.sql:/docker
+  
+  app:
+    image: imageapp
+    container_name: michel_app
+    restart: always
+    volumes:
+      - ./app:/var/www/html
+    ports:
+      - 8080:80
+    depends_on:
+      - db
